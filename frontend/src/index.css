@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+html, body, #root { height: 100%; }
+body { font-family: 'Inter', sans-serif; }
+
+@layer components {
+  .glass { @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl; }
+  .btn { @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold transition-all; }
+  .btn-primary { @apply btn bg-ethio-green text-white hover:bg-ethio-green/90 shadow-lg shadow-ethio-green/30; }
+  .btn-accent { @apply btn bg-ethio-yellow text-black hover:scale-[1.02]; }
+  .input { @apply w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-ethio-yellow outline-none transition; }
+  .card { @apply glass p-6 hover:bg-white/10 transition; }
+  .h-display { @apply font-display tracking-tight; }
+}
+
+.light body { @apply bg-white text-neutral-900; }

@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { createOrder, trackOrder, myOrders, updateStatus } from '../controllers/order.controller.js';
+import { protect, admin } from '../middleware/auth.js';
+import { upload } from '../middleware/upload.js';
+const r = Router();
+r.post('/', upload.array('images', 5), createOrder);
+r.get('/track/:orderId', trackOrder);
+r.get('/mine', protect, myOrders);
+r.patch('/:orderId/status', protect, admin, updateStatus);
+export default r;
