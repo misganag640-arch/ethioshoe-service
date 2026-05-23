@@ -25,7 +25,7 @@ export default function Order() {
       const fd = new FormData();
       Object.entries(form).forEach(([k,v])=>fd.append(k,v));
       files.forEach(f=>fd.append('images',f));
-      const { data } = await api.post('/orders', fd);
+     const { data } = await api.post('/api/orders', fd);
       setDone(data);
       toast.success('Order placed!');
     } catch(err) { toast.error(err.response?.data?.message || 'Failed'); }
