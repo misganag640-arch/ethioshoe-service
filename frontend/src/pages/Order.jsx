@@ -27,7 +27,7 @@ export default function Order() {
       files.forEach(f=>fd.append('images',f));
      const { data } = await api.post('/api/orders', fd);
       setDone(data);
-      toast.success('Order placed!');
+     const { data } = await api.post('/api/orders', fd);
     } catch(err) { toast.error(err.response?.data?.message || 'Failed'); }
     finally { setLoading(false); }
   };
