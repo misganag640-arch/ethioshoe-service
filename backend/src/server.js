@@ -39,7 +39,7 @@ app.use(helmet());
 
 // CORS FIX
 app.use(cors({
-  origin: "*",
+  origin: "https://ethioshoe-service-h2ug.onrender.com",
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
 }));
 
