@@ -8,7 +8,7 @@ export default function Register(){
   const [f,setF]=useState({name:'',email:'',phone:'',password:''});
   const d=useDispatch(); const n=useNavigate();
   const submit=async e=>{e.preventDefault();
-    try{ const {data}=await api.post('/auth/register',f); d(setAuth(data)); toast.success('Account created!'); n('/dashboard');}
+    try{ const {data}=await api.post('/api/auth/register',f); d(setAuth(data)); toast.success('Account created!'); n('/dashboard');}
     catch(err){toast.error(err.response?.data?.message||'Failed')}
   };
   return (

@@ -8,7 +8,7 @@ export default function Login(){
   const [f,setF]=useState({email:'',password:''});
   const d=useDispatch(); const n=useNavigate();
   const submit=async e=>{e.preventDefault();
-    try{ const {data}=await api.post('/auth/login',f); d(setAuth(data)); toast.success('Welcome!'); n('/dashboard');}
+    try{ const {data}=await api.post('/api/auth/login',f); d(setAuth(data)); toast.success('Welcome!'); n('/dashboard');}
     catch(err){toast.error(err.response?.data?.message||'Login failed')}
   };
   return (
