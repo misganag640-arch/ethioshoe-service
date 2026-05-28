@@ -17,8 +17,6 @@ import adminRoutes from './routes/admin.routes.js';
 import paymentRoutes from './routes/payment.routes.js';
 import reviewRoutes from './routes/review.routes.js';
 
-import { errorHandler } from './middleware/error.js';
-
 dotenv.config();
 
 await connectDB();
@@ -26,32 +24,50 @@ await connectDB();
 const app = express();
 const server = http.createServer(app);
 
-// Socket.io
+/* =========================
+   CORS MUST BE FIRST
+========================= */
+app.use(cors({
+  origin: "https://ethioshoe-service-h2ug.onrender.com",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
+
+app.options("*", cors());
+
+/* =========================
+   SOCKET.IO
+========================= */
 export const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: "https://ethioshoe-service-h2ug.onrender.com",
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    credentials: true,
   },
 });
 
-// Security
-app.use(helmet());
+/* =========================
+   SECURITY
+========================= */
+// TEMPORARILY DISABLED FOR TESTING
+// app.use(helmet());
 
-// CORS FIX
-app.use(cors({
-  origin: "https://ethioshoe-service-h2ug.onrender.com",
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-}));
-
-// Middleware
+/* =========================
+   MIDDLEWARE
+========================= */
 app.use(express.json({ limit: '10mb' }));
 app.use(xss());
 app.use(morgan('dev'));
 
-// Static folder
+/* =========================
+   STATIC FILES
+========================= */
 app.use('/uploads', express.static('uploads'));
 
-// Rate limit
+/* =========================
+   RATE LIMIT
+========================= */
 app.use(
   '/api',
   rateLimit({
@@ -60,7 +76,9 @@ app.use(
   })
 );
 
-// Health check
+/* =========================
+   HEALTH CHECK
+========================= */
 app.get('/api/health', (_, res) => {
   res.json({
     ok: true,
@@ -68,7 +86,9 @@ app.get('/api/health', (_, res) => {
   });
 });
 
-// Routes
+/* =========================
+   ROUTES
+========================= */
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);
@@ -76,10 +96,21 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/reviews', reviewRoutes);
 
-// Error handler
-app.use(errorHandler);
+/* =========================
+   ERROR HANDLER
+========================= */
+app.use((err, req, res, next) => {
+  console.error(err.stack);
 
-// Socket connection
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || 'Server Error',
+  });
+});
+
+/* =========================
+   SOCKET CONNECTION
+========================= */
 io.on('connection', (socket) => {
   console.log('User connected');
 
@@ -92,7 +123,9 @@ io.on('connection', (socket) => {
   });
 });
 
-// Port
+/* =========================
+   PORT
+========================= */
 const PORT = process.env.PORT || 5000;
 
 server.listen(PORT, () => {
